@@ -34,6 +34,17 @@ Thumbs.db
 # Logs
 *.log
 
+# Outputs - Ignorar dados grandes, manter imagens
+outputs/*.csv
+outputs/*.parquet
+outputs/*.xlsx
+outputs/**/*.csv
+outputs/**/*.parquet
+# Manter imagens PNG e SVG para documentação
+!outputs/**/*.png
+!outputs/**/*.svg
+!outputs/**/*.jpg
+
 # Dados locais grandes
 
 
