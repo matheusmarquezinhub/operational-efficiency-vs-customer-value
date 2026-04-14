@@ -1,109 +1,108 @@
-# Análise de Performance - Mix de Serviços 📊
+# Operational Efficiency vs Customer Value
 
-Uma análise completa de performance e rentabilidade dos serviços, com visualizações interativas e insights de mix de produtos.
+Case analítico sobre eficiência econômica operacional a partir de ordens de serviço, mix de serviços, tipo de atendimento e regras de repasse.
 
-## 🎯 Objetivo
+## Resumo Executivo
 
-Este projeto realiza uma análise detalhada do desempenho de diferentes serviços, identificando padrões de rentabilidade, composição do mix de produtos e tendências ao longo do tempo.
+Este projeto investiga uma pergunta comum em operações de serviço: crescer em receita significa, de fato, crescer com eficiência?
 
-## ⚠️ Dados de Teste
+Usando dados sintéticos de ordens de serviço, o case mostra como volume, mix, repasse e forma de atendimento alteram a margem operacional ao longo do tempo. O foco não está em complexidade técnica, mas em como traduzir dados operacionais em decisões práticas de gestão.
 
-**Os dados exibidos nos outputs deste projeto são FAKES (dados simulados para demonstração).** Este é um projeto de exemplo e prototipagem. Para uso em produção, conecte-o a um banco de dados real alterando as credenciais no arquivo `.env`.
+## Problema de Negócio
 
-## 📋 Pré-requisitos
+Em operações baseadas em serviços, faturamento isolado é um indicador incompleto. Meses com maior receita podem esconder uma combinação menos eficiente de serviços, repasses mais altos e menor captura de valor para a operação.
 
-- Python 3.8+
-- pip ou conda
-- Acesso ao banco de dados SQL configurado no `.env`
+A questão central deste case é:
 
-## 🚀 Como usar
+**Quais combinações de serviços e atendimentos aumentam a carga operacional sem gerar ganho proporcional de eficiência econômica?**
 
-### 1. Clone o repositório
-```bash
-git clone https://github.com/seu-usuario/analise-de-performance-mix-de-servicos.git
-cd analise-de-performance-mix-de-servicos
+## Perguntas Que a Análise Responde
+
+- Quais períodos apresentam melhor e pior eficiência econômica?
+- O aumento de receita veio acompanhado de melhora de margem?
+- Quanto da piora de margem é explicado por repasse e taxas?
+- Quais serviços e tipos de atendimento mudam o mix entre o melhor e o pior mês?
+- Onde a operação parece estar trocando volume por qualidade de resultado?
+
+## Contexto Dos Dados
+
+- Base: ordens de serviço com cliente, data, valor, forma de pagamento, tipo de atendimento e serviço.
+- Recorte analítico: visão mensal da operação.
+- Regras aplicadas: cálculo de taxas por forma de pagamento, repasse por tipo de atendimento, lucro líquido, custo variável e margem.
+- Observação: os dados publicados no repositório são sintéticos e servem apenas para demonstrar o raciocínio analítico.
+
+## Metodologia
+
+O fluxo da análise segue quatro etapas:
+
+1. Extração das ordens de serviço a partir de SQL Server.
+2. Tratamento e aplicação das regras de negócio para taxa, repasse e lucro líquido.
+3. Agregação mensal de KPIs operacionais e econômicos.
+4. Comparação entre melhor e pior mês para identificar o efeito de mix, repasse e tipo de atendimento.
+
+Principais métricas usadas no case:
+
+- `faturamento`: soma dos valores das ordens de serviço.
+- `repasse`: parcela transferida conforme a regra de atendimento.
+- `taxa`: custo associado ao meio de pagamento.
+- `lucro`: valor retido pela operação após repasse e taxa.
+- `custo_variavel`: soma de repasse e taxa.
+- `margem`: lucro dividido pelo faturamento.
+- `ticket`: média de valor capturado por atendimento no consolidado mensal.
+
+## Principais Insights
+
+- O maior faturamento não correspondeu ao melhor resultado operacional. Outubro de 2025 faturou `R$ 11.900`, mas registrou a pior margem do período, `59,24%`.
+- Junho de 2025 teve faturamento bem menor, `R$ 4.827`, e ainda assim apresentou a melhor margem, `63,26%`.
+- A decomposição entre o melhor e o pior mês indica que o aumento de repasse explica `84%` da queda de margem observada.
+- O mês de pior margem concentrou mais receita em `Salão` (`97,31%` da receita) e operou com mix de serviços mais amplo, sem traduzir esse aumento de complexidade em melhor eficiência.
+- O mix do pior mês sugere expansão de volume e variedade, mas com captura de valor inferior por composição operacional.
+
+## Decisões De Negócio Sugeridas
+
+- Revisar políticas de repasse e renegociar condições nos serviços que pressionam a margem.
+- Priorizar serviços e combinações com melhor relação entre receita e captura de valor.
+- Tratar meses de maior faturamento com análise de qualidade de receita, não apenas volume.
+- Monitorar o mix por tipo de atendimento para evitar crescimento concentrado em operações menos eficientes.
+
+## Visualizações-Chave
+
+### Evolução Mensal Da Margem
+
+![Evolução mensal da margem](outputs/figures/01_monthly_margin_trend.png)
+
+### Decomposição Da Queda De Margem
+
+![Decomposição da queda de margem](outputs/figures/02_margin_bridge_best_vs_worst_month.png)
+
+## Estrutura Do Repositório
+
+```text
+operational-efficiency-vs-customer-value/
+├─ README.md
+├─ requirements.txt
+├─ .env.example
+├─ LICENSE
+├─ notebooks/
+│  └─ 01_operational_efficiency_case.ipynb
+├─ outputs/
+│  ├─ data/
+│  └─ figures/
 ```
 
-### 2. Configure o ambiente
+## Como Reproduzir
 
-Crie um arquivo `.env` na raiz do projeto (use `.env.example` como referência):
-```bash
-cp .env.example .env
-```
+1. Clone o repositório.
+2. Crie o arquivo `.env` a partir de `.env.example`.
+3. Instale as dependências com `pip install -r requirements.txt`.
+4. Abra o notebook [notebooks/01_operational_efficiency_case.ipynb](notebooks/01_operational_efficiency_case.ipynb).
 
-Edite o `.env` com suas credenciais de banco de dados:
-```
-DB_SERVER=seu-servidor
-DB_DRIVER=seu-driver
-DB_DATABASE=seu-banco
-DB_USER=seu-usuario
-DB_PASSWORD=sua-senha
-TRUST_CERT=yes/no
-```
+## Limitações
 
-### 3. Instale as dependências
+- O material versionado usa dados sintéticos.
+- O case atual mede eficiência econômica operacional; não há uma coluna explícita de horas por ordem no notebook publicado.
+- A leitura de esforço por cliente é indireta, baseada em mix, valor, repasse e perfil de atendimento.
 
-```bash
-pip install -r requirements.txt
-```
+## Observação Sobre O Nome Do Repositório
 
-### 4. Execute a análise
-
-Abra o Jupyter Notebook:
-```bash
-jupyter notebook notebooks/analise_performance.ipynb
-```
-
-Ou use VSCode com a extensão Jupyter.
-
-## 📦 Estrutura do Projeto
-
-```
-├── notebooks/
-│   └── analise_performance.ipynb    # Análise principal com visualizações
-├── src/
-│   └── config.py                    # Configurações e funções reutilizáveis
-├── docs/
-│   └── README.md                    # Documentação adicional
-├── requirements.txt                 # Dependências do projeto
-├── .env.example                     # Template de variáveis de ambiente
-├── .gitignore                       # Arquivos a ignorar no Git
-└── README.md                        # Este arquivo
-```
-
-## 📊 O que a análise inclui
-
-- ✅ Carregamento de dados do SQL Server
-- ✅ Limpeza e transformação de dados
-- ✅ Análise de performance por período
-- ✅ Visualização de mix de serviços (Pie/Sunburst charts)
-- ✅ Identificação de melhores e piores períodos
-- ✅ Cálculo de métricas-chave (ticket médio, taxa, repasse, resíduo)
-- ✅ Geração de relatórios interativos com Plotly
-
-## 🔧 Dependências Principais
-
-- **pandas** - Manipulação e análise de dados
-- **SQLAlchemy** - ORM para conexão com SQL Server
-- **pyodbc** - Driver ODBC para SQL Server
-- **plotly** - Visualizações interativas
-- **python-dotenv** - Gerenciamento de variáveis de ambiente
-
-## ⚠️ Segurança
-
-⚠️ **NUNCA** faça commit do arquivo `.env` - ele contém credenciais sensíveis!
-
-Use o arquivo `.env.example` como template e mantenha `.env` no `.gitignore`.
-
-## 📝 Licença
-
-MIT
-
-## 👤 Autor
-
-Matheus Marquezin | https://github.com/matheusmarquezinhub
-
-## 💬 Contribuindo
-
-Pull requests são bem-vindos! Para grandes mudanças, abra uma issue primeiro.
-
+O case foi reposicionado para o nome `operational-efficiency-vs-customer-value`. Se o repositório estiver publicado no GitHub, a troca efetiva do nome também precisa ser feita na interface do GitHub.
